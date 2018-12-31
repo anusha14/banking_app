@@ -1,0 +1,44 @@
+﻿{% extends "home.html" %}
+{% block content %}
+<div class="jumbotron">
+    {% if session['username'] %}
+    <br/>
+    <h4>Your Account Number: {{ account.id }} has a balance of Rs. {{ account.balance }}</h4>
+    <hr>
+
+    <hr>
+    <h4>Your transactions</h4>
+    <table class="table" id="transactions-table" style="text-align: left;">
+        <thead>
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+            <th scope="col">Amount</th>
+            <th scope="col">DateTime</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>Rs.{{ transaction.amount }}</td>
+            <td>{{ transaction.date }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h1>Please log in!</h1>
+    <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</div>
+
+<style>
+    @media only screen and (max-width: 576px){
+      body #transactions-table{
+        font-size:3vw; /* 2vw = 2 times view width (dynmaic text size)  */
+      }
+
+</style>
+{% endblock %}

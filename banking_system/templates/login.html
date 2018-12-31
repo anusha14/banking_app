@@ -1,0 +1,69 @@
+﻿{% extends "home.html" %}
+{% block content %}
+<style>
+    .jumbotron {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 100px;
+            }
+
+</style>
+<div class="jumbotron">
+    <h1>Login to your bank account</h1>
+    <div style="max-width: 450px;">
+        <form method="POST">
+            {{ form.hidden_tag()}}
+            <div class="form-group">
+                <strong>
+                    {{ form.id.label }}
+                </strong>
+                {{ form.id(class="form-control") }}
+                <small id="id-checker"></small>
+            </div>
+            <div class="form-group">
+                <strong>
+                    {{ form.password.label }}
+                </strong>
+                {{ form.password(class="form-control") }}
+            </div>
+
+            {{ form.submit(disabled=True, class="btn btn-primary") }}
+        </form>
+    </div>
+</div>
+<script>
+      let id = document.getElementById('id');
+      let checker = document.getElementById('id-checker');
+      let transfer = document.getElementById('submit');
+      document.onload = function(){
+        transfer.disabled = true;
+      };
+
+      id.onkeyup = function(){
+        if (id.value == '') {
+          id.style.borderColor = '#ced4da';
+          checker.innerHTML = '';
+          transfer.disabled = true;
+        } else{
+          fetch('/json/account/id/' + id.value).then(function(response){
+            response.json().then(function(data){
+
+              checker.innerHTML = data.account;
+              if (data.account == 'valid account ID'){
+                id.style.borderColor = '#28a745';
+                checker.style.color = '#28a745';
+                transfer.disabled = false;
+              } else{
+                id.style.borderColor = '#dc3545';
+                checker.style.color = '#dc3545';
+                transfer.disabled = true;
+              }
+            });
+          });
+        }
+      }
+
+
+</script>
+{% endblock %}
